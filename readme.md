@@ -10,3 +10,6 @@ The Java server will be written using the Java API for WebSockets, and the clien
 
 I have created this project to help solidify my understanding of the Java API for WebSockets after watching the Pluralsight course "Introduction to the Java API for WebSockets" @ https://app.pluralsight.com/library/courses/java-api-websockets-introduction/table-of-contents.
 
+## Getting started
+This Java EE project was created using Adam Bien's minimalist maven archetype, which can be found at:
+- http://www.adam-bien.com/roller/abien/entry/essential_javaee_7_pom_xml
