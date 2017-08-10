@@ -13,3 +13,7 @@ I have created this project to help solidify my understanding of the Java API fo
 ## Getting started
 This Java EE project was created using Adam Bien's minimalist maven archetype, which can be found at:
 - http://www.adam-bien.com/roller/abien/entry/essential_javaee_7_pom_xml
+
+# HTML websocket clients
+_Access the Echo endpoint_ @
+* http://localhost:8080/websockets-chat-app/echo.html
