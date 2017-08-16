@@ -1,14 +1,9 @@
 package com.pluralsight.websockets;
 
-import java.io.IOException;
-
-import javax.websocket.EndpointConfig;
-import javax.websocket.MessageHandler;
-import javax.websocket.OnOpen;
-import javax.websocket.RemoteEndpoint;
+import javax.websocket.*;
 import javax.websocket.RemoteEndpoint.Basic;
-import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 
 @ServerEndpoint(value = "/echo")
 public class EchoEndpoint {
@@ -31,6 +26,7 @@ public class EchoEndpoint {
 		public void onMessage(String message) {
 			if (remoteEndpointBasic != null) {
 				try {
+					System.out.println("Echoing : " + message + "\n");
 					remoteEndpointBasic.sendText(String.format("echo :: %s", message));
 				} catch (IOException e) {
 					e.printStackTrace();
