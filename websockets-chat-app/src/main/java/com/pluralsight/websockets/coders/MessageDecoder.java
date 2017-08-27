@@ -6,7 +6,6 @@ import java.io.StringReader;
 import javax.json.Json;
 import javax.json.JsonException;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
@@ -29,10 +28,8 @@ public class MessageDecoder implements Decoder.Text<Message> {
 
 		if (willDecode(msg)) {
 			try {
-				JsonObject obj = Json.createReader(new StringReader(msg)).readObject();
+				int type = getMessageType(msg);
 				ObjectMapper mapper = new ObjectMapper();
-
-				int type = obj.getInt("type");
 
 				switch (type) {
 				case JOIN_MESSAGE:
@@ -44,6 +41,9 @@ public class MessageDecoder implements Decoder.Text<Message> {
 				case GETUSERS_MESSAGE:
 					message = mapper.readValue(msg, GetUsersMessage.class);
 					break;
+				default:
+					System.out.println(String.format("Unknown message type found [%s]",type));
+					break;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -51,6 +51,12 @@ public class MessageDecoder implements Decoder.Text<Message> {
 		}
 
 		return message;
+	}
+
+	private int getMessageType(String msg) {
+		JsonObject obj = Json.createReader(new StringReader(msg)).readObject();
+		int type = obj.getInt("type");
+		return type;
 	}
 
 	@Override
