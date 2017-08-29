@@ -1,7 +1,10 @@
 package com.pluralsight.websockets.coders;
 
-import java.io.IOException;
-import java.io.StringReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pluralsight.websockets.message.ChatMessage;
+import com.pluralsight.websockets.message.GetUsersMessage;
+import com.pluralsight.websockets.message.JoinMessage;
+import com.pluralsight.websockets.message.Message;
 
 import javax.json.Json;
 import javax.json.JsonException;
@@ -9,12 +12,8 @@ import javax.json.JsonObject;
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pluralsight.websockets.message.ChatMessage;
-import com.pluralsight.websockets.message.GetUsersMessage;
-import com.pluralsight.websockets.message.JoinMessage;
-import com.pluralsight.websockets.message.Message;
+import java.io.IOException;
+import java.io.StringReader;
 
 public class MessageDecoder implements Decoder.Text<Message> {
 
@@ -71,11 +70,9 @@ public class MessageDecoder implements Decoder.Text<Message> {
 
 	@Override
 	public void init(EndpointConfig config) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 	}
 }
