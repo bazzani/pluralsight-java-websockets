@@ -1,3 +1,6 @@
+.idea/
+websockets-chat-app/websockets-chat-app.iml
+
 #### maven
 target/
 pom.xml.tag
