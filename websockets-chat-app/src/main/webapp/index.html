@@ -14,8 +14,7 @@
             <button data-bind="click: join, disable: joined">Join</button>
             <input id="imageName" type="file" placeholder="upload image" data-bind="textInput: userImage"/>
             <span data-bind="text: _userImage"></span>
-            <button data-bind="enable: joined">Upload</button>
-<!--             <button data-bind="click: uploadImage, enable: joined">Upload</button> -->
+            <button data-bind="click: uploadImage, enable: joined">Upload</button>
             <img id="photo" width="30px" height="30px"/>
         </form>
     </header>

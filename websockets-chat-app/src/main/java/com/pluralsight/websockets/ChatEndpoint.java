@@ -7,10 +7,10 @@ import com.pluralsight.websockets.message.*;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,9 +18,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ServerEndpoint(value = "/chat", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
 public class ChatEndpoint {
 
-    static List<ChatEndpoint> clients = new CopyOnWriteArrayList<>();
-    static List<User> users = new ArrayList<>();
-    static List<ChatMessage> messages = new ArrayList<>();
+    private static List<ChatEndpoint> clients = new CopyOnWriteArrayList<>();
+    private static List<User> users = new ArrayList<>();
+    private static List<ChatMessage> messages = new ArrayList<>();
 
     private Session session;
 
@@ -37,33 +37,39 @@ public class ChatEndpoint {
         clients.remove(this);
     }
 
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
     @OnMessage
     public void onMessage(ByteBuffer byteBuffer, boolean complete) {
         try {
             buffer.write(byteBuffer.array());
-            if(complete) {
+            if (complete) {
                 FileOutputStream fileOutputStream = null;
 
                 try {
-                    fileOutputStream = new FileOutputStream(Paths.get("temp\\image.jpg").toFile());
+                    File imageFile = File.createTempFile("image", ".jpg");
+                    System.out.println(String.format("Saving image to [%s]", imageFile.getAbsolutePath()));
+                    fileOutputStream = new FileOutputStream(imageFile);
                     fileOutputStream.write(buffer.toByteArray());
                 } finally {
-                    if(fileOutputStream != null){
+                    if (fileOutputStream != null) {
                         fileOutputStream.flush();
                         fileOutputStream.close();
                     }
                 }
 
-                for(ChatEndpoint client:clients){
+                for (ChatEndpoint client : clients) {
                     final ByteBuffer sendData = ByteBuffer.allocate(buffer.toByteArray().length);
                     sendData.put(buffer.toByteArray());
                     sendData.rewind();
                     client.session.getAsyncRemote().sendBinary(sendData, new SendHandler() {
                         @Override
                         public void onResult(SendResult sendResult) {
-                            System.out.println(sendResult.isOK());
+                            System.out.println(
+                                    String.format("Async Binary data result [%s] [%s]",
+                                            client.session.getId(),
+                                            sendResult.isOK())
+                            );
                         }
                     });
                 }

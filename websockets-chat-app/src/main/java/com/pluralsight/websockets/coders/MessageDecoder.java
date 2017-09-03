@@ -1,10 +1,7 @@
 package com.pluralsight.websockets.coders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pluralsight.websockets.message.ChatMessage;
-import com.pluralsight.websockets.message.GetUsersMessage;
-import com.pluralsight.websockets.message.JoinMessage;
-import com.pluralsight.websockets.message.Message;
+import com.pluralsight.websockets.message.*;
 
 import javax.json.Json;
 import javax.json.JsonException;
@@ -17,10 +14,6 @@ import java.io.StringReader;
 
 public class MessageDecoder implements Decoder.Text<Message> {
 
-	static final int JOIN_MESSAGE = 1;
-	static final int CHAT_MESSAGE = 2;
-	static final int GETUSERS_MESSAGE = 3;
-
 	@Override
 	public Message decode(String msg) throws DecodeException {
 		Message message = null;
@@ -31,13 +24,13 @@ public class MessageDecoder implements Decoder.Text<Message> {
 				ObjectMapper mapper = new ObjectMapper();
 
 				switch (type) {
-				case JOIN_MESSAGE:
+				case MessageType.JOIN:
 					message = mapper.readValue(msg, JoinMessage.class);
 					break;
-				case CHAT_MESSAGE:
+				case MessageType.MESSAGE:
 					message = mapper.readValue(msg, ChatMessage.class);
 					break;
-				case GETUSERS_MESSAGE:
+				case MessageType.GETUSERS:
 					message = mapper.readValue(msg, GetUsersMessage.class);
 					break;
 				default:
