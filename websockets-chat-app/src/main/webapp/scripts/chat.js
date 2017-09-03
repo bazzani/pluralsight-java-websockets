@@ -10,19 +10,19 @@ var chat = (function Chat() {
 		} else if ('MozWebSocket' in window) {
 			socket = new MozWebSocket(host);
 		} else {
-			console.error('Error: Websocket is not supported by this browser.');
+			console.error('Error: WebSocket is not supported by this browser.');
 			return;
 		}
 
 		socket.onopen = function() {
-			console.log('Info: Websocket connection opened.');
+			console.log('Info: WebSocket connection opened.');
 			if (handler) {
 				handler.onopen();
 			}
 		};
 
 		socket.onclose = function() {
-			console.log('Info: Websocket closed.');
+			console.log('Info: WebSocket closed.');
 			if (handler) {
 				handler.onclose();
 			}
@@ -52,8 +52,16 @@ var chat = (function Chat() {
 		}
 	});
 
+	var sendBinary = function(message) {
+	    if(socket) {
+	        socket.send(message);
+	    }
+	};
+
 	return {
 		initialise : initialise,
-		sendMessage : sendMessage
+		sendMessage : sendMessage,
+		sendBinary: sendBinary
 	}
+
 })();

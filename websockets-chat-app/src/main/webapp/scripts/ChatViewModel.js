@@ -121,6 +121,14 @@ function ChatViewModel(chatClient) {
 		self.userName('');
 		self.joined(false);
 	};
+
+	var processBinaryMessage = function(message) {
+        message.type = "image/jpg";
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(message);
+        var img = $('#photo')[0];
+        img.src = imageUrl;
+	};
 	
 	// public members
 	self.users = ko.observableArray();
@@ -142,7 +150,11 @@ function ChatViewModel(chatClient) {
 			signOff();
 		},
 		onmessage : function(message) {
-			processMessage(JSON.parse(message));
+			if(message instanceof Blob) {
+			    processBinaryMessage(message);
+			} else {
+				processMessage(JSON.parse(message));
+			}
 		}
 	};
 
@@ -152,6 +164,15 @@ function ChatViewModel(chatClient) {
 			chat.sendMessage(new JoinMessage(self.userName()));
 			sessionStorage[SESSION_NAME] = self.userName();
 		}
+	};
+
+	self.uploadImage = function () {
+	    var reader = new FileReader();
+	    reader.onload = function() {
+	        var rawData = reader.result;
+	        chat.sendBinary(rawData);
+	    };
+	    reader.readAsArrayBuffer($('#imageName')[0].files[0]);
 	};
 	
 	self.messages = ko.observableArray();
