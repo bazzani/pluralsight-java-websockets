@@ -17,3 +17,10 @@ This Java EE project was created using Adam Bien's minimalist maven archetype, w
 # HTML websocket clients
 _Access the Echo endpoint_ @
 * http://localhost:8080/websockets-chat-app/echo.html
+
+_Access the Chat webapp_ @ 
+* http://localhost:8080/websockets-chat-app/
+
+# Sonar Report
+The Sonar report for this project can be found @
+* https://sonarcloud.io/dashboard?id=com.pluralsight.websockets%3Awebsockets-chat-app
