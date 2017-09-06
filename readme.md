@@ -24,3 +24,11 @@ _Access the Chat webapp_ @
 # Sonar Report
 The Sonar report for this project can be found @
 * https://sonarcloud.io/dashboard?id=com.pluralsight.websockets%3Awebsockets-chat-app
+
+Sonar maven command
+```
+mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
+    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.organization=bazzani-github \
+    -Dsonar.login=b5c80850abb54d57f065ca7e5f7159d8daaaedf6
+```
