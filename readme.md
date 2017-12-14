@@ -30,5 +30,5 @@ Sonar maven command
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.organization=bazzani-github \
-    -Dsonar.login=b5c80850abb54d57f065ca7e5f7159d8daaaedf6
+    -Dsonar.login=___Ask Barry for the Key!___
 ```
