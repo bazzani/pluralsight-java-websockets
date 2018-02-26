@@ -11,6 +11,7 @@
     <header id="heading">
         <form id="join-message">
             <input type="text" placeholder="User Name" data-bind="textInput: userName"/>
+            <input type="text" placeholder="Room Name" data-bind="textInput: roomName"/>
             <button data-bind="click: join, disable: joined">Join</button>
             <input id="imageName" type="file" placeholder="upload image" data-bind="textInput: userImage"/>
             <span data-bind="text: _userImage"></span>
