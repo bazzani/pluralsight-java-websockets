@@ -54,20 +54,21 @@ function ChatViewModel(chatClient) {
 	var self = this;
 	var SESSION_NAME = "userName";
 
-	var initialise = function() {
-		chatClient.initialise(self.handler);
-		if (sessionStorage[SESSION_NAME]
-				&& sessionStorage[SESSION_NAME].length > 0) {
-			self.userName(sessionStorage[SESSION_NAME]);
-			self.joined(true);
-		}
+	var initialise = function(roomName) {
+		chatClient.initialise(roomName, self.handler);
+
+// todo is this code needed?
+//        if (sessionStorage[SESSION_NAME] && sessionStorage[SESSION_NAME].length > 0) {
+//            self.userName(sessionStorage[SESSION_NAME]);
+//            self.joined(true);
+//        }
 	};
 
 	var processMessage = function(msg) {
 		console.log(msg);
 		if (msg.type == MessageTypes.JOIN) {
 			if (self.userName() == msg.name) {
-				self.users.push(new User(msg.name, true));
+				// do nothing as the list of users will be refreshed when we join 
 			} else {
 				self.users.push(new User(msg.name));
 			}
@@ -116,12 +117,6 @@ function ChatViewModel(chatClient) {
 		self.chat.sendMessage(new GetSignedOnUsersMessage());
 	};
 
-	var signOff = function() {
-		sessionStorage.clear();
-		self.userName('');
-		self.joined(false);
-	};
-
 	var processBinaryMessage = function(message) {
         message.type = "image/jpg";
         var urlCreator = window.URL || window.webkitURL;
@@ -136,6 +131,7 @@ function ChatViewModel(chatClient) {
 
 	self.chat = chatClient;
 
+	self.roomName = ko.observable("");
 	self.userName = ko.observable("");
 	self.userImage = ko.observable("");
 	self._userImage = ko.computed(function() {
@@ -144,10 +140,14 @@ function ChatViewModel(chatClient) {
 
 	self.handler = {
 		onopen : function() {
+			chat.sendMessage(new JoinMessage(self.userName()));
 			getSignedOnUsers();
+
+// todo is this code needed
+//			sessionStorage[SESSION_NAME] = self.userName();
 		},
 		onclose : function() {
-			signOff();
+			self.joined(false);
 		},
 		onmessage : function(message) {
 			if(message instanceof Blob) {
@@ -159,11 +159,12 @@ function ChatViewModel(chatClient) {
 	};
 
 	self.join = function() {
-		if (!self.joined() && self.userName() && self.userName().length > 0) {
-			self.joined(true);
-			chat.sendMessage(new JoinMessage(self.userName()));
-			sessionStorage[SESSION_NAME] = self.userName();
-		}
+        if(!self.joined() &&
+           self.userName() && self.userName().length > 0 &&
+           self.roomName() && self.roomName().length > 0) {
+            self.joined(true);
+            initialise(self.roomName());
+        }
 	};
 
 	self.uploadImage = function () {
@@ -187,6 +188,4 @@ function ChatViewModel(chatClient) {
         var msg = new NewChatMessage(self.userName(), self.message());
         chat.sendMessage(msg);
     };
-    
-    initialise();
 }

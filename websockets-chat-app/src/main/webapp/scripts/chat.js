@@ -4,7 +4,7 @@ var chat = (function Chat() {
 	var socket = null;
 	var handler;
 
-	var connect = (function(host) {
+	var connect = function(host) {
 		if ('WebSocket' in window) {
 			socket = new WebSocket(host);
 		} else if ('MozWebSocket' in window) {
@@ -34,11 +34,11 @@ var chat = (function Chat() {
 				handler.onmessage(message.data);
 			}
 		};
-	});
+	};
 
-	var initialise = function(callback) {
+	var initialise = function(roomName, callback) {
 		handler = callback;
-		var ep = '/websockets-chat-app/chat';
+		var ep = '/websockets-chat-app/chat/' + roomName;
 		if (window.location.protocol == 'http:') {
 			connect('ws://' + window.location.host + ep);
 		} else {
@@ -46,11 +46,11 @@ var chat = (function Chat() {
 		}
 	};
 
-	var sendMessage = (function(message) {
+	var sendMessage = function(message) {
 		if (socket) {
 			socket.send(JSON.stringify(message));
 		}
-	});
+	};
 
 	var sendBinary = function(message) {
 	    if(socket) {
